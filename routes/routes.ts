@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 
 const router = Router();
 
+// Servicio GET
 router.get('/mensajes', ( req: Request, res: Response) => {
    res.json({
        ok: true,
@@ -9,6 +10,7 @@ router.get('/mensajes', ( req: Request, res: Response) => {
    });
 });
 
+// Servicio POST que recibe datos
 router.post('/mensajes', (req: Request, res: Response) => {    
   const cuerpo = req.body.cuerpo;  
   const de     = req.body.de;
@@ -20,8 +22,7 @@ router.post('/mensajes', (req: Request, res: Response) => {
   });
 });
 
-// 
-
+// Servicio POST que recibe datos y un parámetro en la URL
 router.post('/mensajes/:id', (req: Request, res: Response) => {
   const cuerpo = req.body.cuerpo;
   const de     = req.body.de;
@@ -45,6 +46,7 @@ router.put('/mensajes', (req: Request, res: Response) => {
   });
 });
 
+// Servicio PUT con el objetos de los parámetros en la URL
 router.put('/mensajes/:id', (req: Request, res: Response) => {
   const valores = req.params;
   res.json({
@@ -54,6 +56,7 @@ router.put('/mensajes/:id', (req: Request, res: Response) => {
   });
 });
 
+// Servicio DELETE
 router.delete('/mensajes', (req: Request, res: Response) => {
   res.json({  
       ok: true,

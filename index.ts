@@ -2,7 +2,8 @@ import Server from './classes/server';
 import router from './routes/routes';
 import cors   from 'cors';
 
-const server = new Server();
+// const server = new Server(); // Antes de implementar el patrón singleton
+const server = Server.instance;
 
 // 16. Obtener información del Post y argumentos por URL
 // Body Parser
