@@ -2,7 +2,7 @@ import express from 'express';
 import { SERVER_PORT } from '../global/environment';
 // 22. Continuación del proyecto - Socket.io
 import http from 'http';
-import socketIO, { Socket } from 'socket.io';
+import socketIO from 'socket.io';
 // 27. Detectar la desconexión de un usuario - Servidor
 // importar sólo la constante: desconectar (Es la que contiene la función)
 // import { desconectar } from '../sockets/sockets';  // Own solution test 1/2
@@ -57,11 +57,21 @@ export default class Server {
   private escucharSockets() {
     console.log('Atención: Escuchando conexiones - sockets (server)');
     this.io.on('connection', cliente => {
-      console.log('Cliente conectado');
+      console.log('Cliente conectado:', cliente.id );
 
       // Este es el lugar donde vamos a crear TODOS los eventos
       // Vamos a emitir y a escuchar eventos. Dado que puede contener muchas
       // líneas de código, se integrará desde ../sockets/socets.ts
+
+      // 40. Manejo de usuarios - Socket Server
+      // Conectar cliente
+      socket.usuarioConectar( cliente );
+
+      // Movido aquí en    : 40. Manejo de usuarios - Socket Server
+      // Creado a partir de: 39. Manejando usuarios conectados en el socket-server
+      // Configurar cliente  
+      socket.usuarioCfg ( cliente, this.io );
+      // socket.usuarioCfg ( cliente, this.io, this.io );
       
       // 27. Detectar la desconexión de un usuario - Servidor
       //     Función para escuchar la desconexión. Integrada en este mismo archivo
@@ -72,8 +82,12 @@ export default class Server {
       // Own solution test 2/2
       // desconectar( cliente );
 
+      // Lista de usuarios conectados
+      // socket.listarUsuarios( this.io );
+
       // Desconectar cliente
-      socket.desconectar( cliente );
+      // socket.desconectar( cliente );
+      socket.desconectar( cliente, this.io );
 
       // Recibir mensaje
       socket.mensaje ( cliente, this.io );

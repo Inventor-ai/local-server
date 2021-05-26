@@ -1,4 +1,6 @@
 import { Router, Request, Response } from 'express';
+import Server from '../classes/server';
+import { MSGprivado, MSGdeLaSALA } from '../sockets/socket.events';
 
 const router = Router();
 
@@ -14,6 +16,14 @@ router.get('/mensajes', ( req: Request, res: Response) => {
 router.post('/mensajes', (req: Request, res: Response) => {    
   const cuerpo = req.body.cuerpo;  
   const de     = req.body.de;
+
+  const payload = { de, cuerpo };
+  // Instancia sea ÚNICA por patrón SINGLETON
+  // const server = Server.instance;
+  // server.io.emit( MSGdeLaSALA, payload );
+  // La línea siguiente reeamplaza a las dos previas
+  Server.instance.io.emit( MSGdeLaSALA, payload );
+
   res.json ({
       ok: true,
       msg: 'Servicio POST running ok',
@@ -28,11 +38,20 @@ router.post('/mensajes/:id', (req: Request, res: Response) => {
   const de     = req.body.de;
   const id     = req.params.id;
   const params = req.params;
+
+  const payload = {
+    de, cuerpo
+  };
+
+  // El patrón SINGLETON asegura que la instancia sea ÚNICA
+  const server = Server.instance;
+  server.io.in( id ).emit( MSGprivado, payload );
+
   res.json ({
       ok: true,
       msg: 'Servicio POST with URL params running ok',
-    //   cuerpo: cuerpo, // Puede expresarse así
-      cuerpo,            // pero es más simple así
+      // cuerpo: cuerpo, // Puede expresarse así pero
+      cuerpo,            // es = y + más simple así.
       de,
       id,
       params
