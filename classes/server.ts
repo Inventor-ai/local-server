@@ -5,7 +5,7 @@ import http from 'http';
 import socketIO from 'socket.io';
 // 27. Detectar la desconexión de un usuario - Servidor
 // importar sólo la constante: desconectar (Es la que contiene la función)
-// import { desconectar } from '../sockets/sockets';  // Own solution test 1/2
+// import { desconectar, usersOnLine } from '../sockets/sockets';  // Own solution test 1/2
 // Importa todas las exportaciones disponibles en: '../sockets/sockets'
 // pueden bajo el nombre socket (<-identificador / Alias) seguidas de .[nombre]
 // socket.[constante/funcion exportadas]
@@ -54,6 +54,12 @@ export default class Server {
     return this._instance || ( this._instance = new this() );
   }
 
+  // Own Solution for lesson 51 and 52
+  // 52. REST - Obtener los nombres y los IDs de las personas conectadas
+  public get usersOnLineLst() {
+    return socket.usersOnLine.usuariosListaGet();
+  }
+
   private escucharSockets() {
     console.log('Atención: Escuchando conexiones - sockets (server)');
     this.io.on('connection', cliente => {
@@ -71,26 +77,18 @@ export default class Server {
       // Creado a partir de: 39. Manejando usuarios conectados en el socket-server
       // Configurar cliente  
       socket.usuarioCfg ( cliente, this.io );
-      // socket.usuarioCfg ( cliente, this.io, this.io );
-      
-      // 27. Detectar la desconexión de un usuario - Servidor
-      //     Función para escuchar la desconexión. Integrada en este mismo archivo
-      // cliente.on('disconnect', () => {
-      //   console.log('Cliente desconectado');
-      // });
-      //     Función para escuchar la desconexión. Importada desde otro archivo
-      // Own solution test 2/2
-      // desconectar( cliente );
 
-      // Lista de usuarios conectados
-      // socket.listarUsuarios( this.io );
+      // 54. Tarea - Obtener lista de usuarios - socket
+      // Obtener lista de clientes activos
+      socket.usuariosObtener( cliente, this.io );
 
       // Desconectar cliente
-      // socket.desconectar( cliente );
-      socket.desconectar( cliente, this.io );
+      // socket.desconectar( cliente );        // 27. Detectar la desconexión de un usuario - Servidor
+      socket.desconectar( cliente, this.io );  // 53. Componente de Lista de Usuarios
 
       // Recibir mensaje
       socket.mensaje ( cliente, this.io );
+      
     });
   }
 

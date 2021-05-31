@@ -35,8 +35,14 @@ export class UsuariosLista {
 
     // Obtener lista de usuarios
     public usuariosListaGet() { // Own Name
-    // public getLista() {      // Video Name
-      return this.lista;
+      // public getLista() {      // Video Name
+      // return this.lista.filter ( ( usuario: Usuario ) => // It works too
+      // 53. Componente de Lista de Usuarios
+      //  Filtra de la lista usuarios sin logear
+      // Omite usuarios que sólo abrieron la app sin acceder aún
+      return this.lista.filter ( usuario => // Video version
+         usuario.nombre !== 'sin-nombre'
+      );
     }
 
     // Regresar un usuario
@@ -67,7 +73,7 @@ export class UsuariosLista {
       //   });
     }
 
-    // Borrar un usuario => Decuelve el usuario borrado
+    // Borrar un usuario => Devuelve el usuario borrado
     // (Cuando un usuario deja el chat ya no hay que mantenerlo en la lista)
     public usuarioDelete(id: string) {      // Own Name
     // public borrarUsuario (id: string) {  // Video Name
